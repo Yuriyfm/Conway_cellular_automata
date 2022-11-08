@@ -13,12 +13,12 @@ let CellsGrid = () => {
 
     let [cells, setCells] = useState(createCellsGrid())
     let [isStartLife, setIsStartLife] = useState(false)
-    let [step, setStep] = useState(1000)
+    let [stepInterval, setStepInterval] = useState(1000)
 
     useEffect(() => {
         if (isStartLife) {
             let timerID = setInterval(() => {startLifeProcess()
-            }, step)
+            }, stepInterval)
             return () => clearTimeout(timerID)
         }
     }, [cells])
@@ -112,7 +112,7 @@ let CellsGrid = () => {
             <div style={{margin: 10, display: "flex", justifyContent: 'center'}}>
                 <div style={{marginRight: 20}}>
                     <span style={{marginRight: 10}}>скорость шага (мс.)</span>
-                    <input type="number" onChange={(e) => setStep(+e.target.value)}/>
+                    <input type="number" onChange={(e) => setStepInterval(+e.target.value)}/>
                 </div>
                 <button style={{marginRight: 20}} onClick={() => {
                     resetGrid()
