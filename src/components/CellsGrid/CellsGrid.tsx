@@ -1,24 +1,25 @@
 import React, {useEffect, useState} from "react";
-
+import './CellsGrid.scss'
 
 let CellsGrid = () => {
 
-    let cellSize = 14;
-    let gridWidth = 50
-    let gridHeight = 50
+    let gridWidth : number = 50
+    let gridHeight : number = 50
 
-    let createCellsGrid = () => {
+    let createCellsGrid = () : Array<Array<number>> => {
         return Array(gridWidth).fill(0).map(row => new Array(gridHeight).fill(0))
     }
 
     let [cells, setCells] = useState(createCellsGrid())
-    let [isStartLife, setIsStartLife] = useState(false)
-    let [stepInterval, setStepInterval] = useState(1000)
+    let [isStartLife, setIsStartLife] = React.useState<boolean>(false)
+    let [stepInterval, setStepInterval] = React.useState<number>(100)
+    let [isMouseDown, setIsMouseDown] = React.useState<boolean>(false)
 
     useEffect(() => {
         if (isStartLife) {
             let timerID = setInterval(() => {startLifeProcess()
             }, stepInterval)
+
             return () => clearTimeout(timerID)
         }
     }, [cells])
@@ -109,29 +110,41 @@ let CellsGrid = () => {
 
     return (
         <div>
-            <div style={{margin: 10, display: "flex", justifyContent: 'center'}}>
-                <div style={{marginRight: 20}}>
-                    <span style={{marginRight: 10}}>скорость шага (мс.)</span>
-                    <input type="number" onChange={(e) => setStepInterval(+e.target.value)}/>
+            <div className={'buttonsContainer'}>
+                    <span>скорость шага (мс.)</span>
+                    <input type="number" value={stepInterval} step={50}
+                           onChange={(e) => setStepInterval(+e.target.value)}/>
+                <div>
+                    <button className={'button'} onClick={() => {
+                        resetGrid()
+                        setIsStartLife(false)
+                    }}>обновить</button>
+                    {isStartLife ? (
+                        <button className={'button'} onClick={() => {
+                            setIsStartLife(false)
+                        }}>Стоп
+                        </button>
+                    ) : (
+                        <button className={'button'}  onClick={() => {
+                            setIsStartLife(true)
+                            startLifeProcess()
+                        }}>Старт
+                        </button>
+                    )}
                 </div>
-                <button style={{marginRight: 20}} onClick={() => {
-                    resetGrid()
-                    setIsStartLife(false)
-                }}>обновить</button>
-                <button onClick={() => {
-                    setIsStartLife(true)
-                    startLifeProcess()
-                }}>старт
-                </button>
+
+
             </div>
             {cells.map((row, y) => (
                 <div key={y} style={{display: 'flex'}}>
                     {row.map((cell, x) => (
-                        <div key={x} style={{
-                            height: cellSize, width: cellSize,
-                            border: '1px solid lightgrey', backgroundColor: cell === 1 && 'red'
-                        }}
+                        <div key={x} className={cell ? 'cellStyleFill' : 'cellStyleEmpty'}
                              onClick={() => cell === 1 ? deleteCell(x, y) : setCell(x, y)}
+                             onMouseDown={() => setIsMouseDown(true)}
+                             onMouseUp={() => setIsMouseDown(false)}
+                             onMouseEnter={() => {if (isMouseDown) {
+                                 cell === 1 ? deleteCell(x, y) : setCell(x, y)
+                             }}}
                         >{''}</div>
                     ))}
                 </div>

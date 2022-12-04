@@ -1,0 +1,16 @@
+$main-font:  "Tahoma";
+$primary-color: #3333;
+
+.About {
+  a {}
+  a:visited {
+    color: red;
+  }
+
+  a:hover { background: gold; }
+
+
+  p {
+    font-weight: 500;
+  }
+}

@@ -1,0 +1,21 @@
+.AppContainer {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+
+  .AboutBlock {
+    margin: 10px 20px;
+    width: 25%;
+    overflow: auto;
+  }
+
+  .mainBlock {
+    width: 50%;
+  }
+  .rightBlock {
+    width: 25%;
+  }
+}
+
