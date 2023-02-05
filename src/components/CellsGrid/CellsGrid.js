@@ -1,20 +1,17 @@
 import React, {useEffect, useState} from "react";
 import './CellsGrid.scss'
-
+import {useDispatch, useSelector} from "react-redux";
+import {addSelectedGrid} from '../../reduxToolkit/reducers/mainReducer'
+import ButtonsBlock from "./ButtonsBlock/ButtonsBlock";
+import {createCellsGrid} from "../../utils/createCellsGrid";
 let CellsGrid = () => {
-
-    let gridWidth : number = 50
-    let gridHeight : number = 50
-
-    let createCellsGrid = () : Array<Array<number>> => {
-        return Array(gridWidth).fill(0).map(row => new Array(gridHeight).fill(0))
-    }
+    const dispatch = useDispatch()
+    const selectedGrid = useSelector(state => state.mainReducer.selectedGrid)
 
     let [cells, setCells] = useState(createCellsGrid())
-    let [isStartLife, setIsStartLife] = React.useState<boolean>(false)
-    let [stepInterval, setStepInterval] = React.useState<number>(100)
-    let [isMouseDown, setIsMouseDown] = React.useState<boolean>(false)
-
+    let [isStartLife, setIsStartLife] = React.useState(false)
+    let [stepInterval, setStepInterval] = React.useState(100)
+    let [isMouseDown, setIsMouseDown] = React.useState(false)
     useEffect(() => {
         if (isStartLife) {
             let timerID = setInterval(() => {startLifeProcess()
@@ -22,16 +19,20 @@ let CellsGrid = () => {
 
             return () => clearTimeout(timerID)
         }
-    }, [cells])
+        if (selectedGrid) {
+            setCells(selectedGrid)
+            dispatch(addSelectedGrid(null))
+        }
+    }, [cells, selectedGrid])
 
     let setCell = (x, y) => {
-        let newCells = cells
+        let newCells = JSON.parse(JSON.stringify(cells))
         newCells[y][x] = 1
         setCells([...newCells])
     }
 
     let deleteCell = (x, y) => {
-        let newCells = cells
+        let newCells = JSON.parse(JSON.stringify(cells))
         newCells[y][x] = 0
         setCells([...newCells])
     }
@@ -110,35 +111,13 @@ let CellsGrid = () => {
 
     return (
         <div>
-            <div className={'buttonsContainer'}>
-                    <span>скорость шага (мс.)</span>
-                    <input type="number" value={stepInterval} step={50}
-                           onChange={(e) => setStepInterval(+e.target.value)}/>
-                <div>
-                    <button className={'button'} onClick={() => {
-                        resetGrid()
-                        setIsStartLife(false)
-                    }}>обновить</button>
-                    {isStartLife ? (
-                        <button className={'button'} onClick={() => {
-                            setIsStartLife(false)
-                        }}>Стоп
-                        </button>
-                    ) : (
-                        <button className={'button'}  onClick={() => {
-                            setIsStartLife(true)
-                            startLifeProcess()
-                        }}>Старт
-                        </button>
-                    )}
-                </div>
-
-
-            </div>
+            <ButtonsBlock stepInterval={stepInterval} setStepInterval={setStepInterval} resetGrid={resetGrid}
+            setIsStartLife={setIsStartLife} isStartLife={isStartLife} startLifeProcess={startLifeProcess} cells={cells}/>
             {cells.map((row, y) => (
                 <div key={y} style={{display: 'flex'}}>
                     {row.map((cell, x) => (
                         <div key={x} className={cell ? 'cellStyleFill' : 'cellStyleEmpty'}
+                             // style={{backgroundColor: (y < 26 && y > 23) && (x < 26 && x > 23) && 'blue'}}
                              onClick={() => cell === 1 ? deleteCell(x, y) : setCell(x, y)}
                              onMouseDown={() => setIsMouseDown(true)}
                              onMouseUp={() => setIsMouseDown(false)}

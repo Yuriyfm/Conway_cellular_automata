@@ -14,7 +14,7 @@ $cellSize: 14px;
 
 .cellStyleFill {
 @extend.cellStyleEmpty;
-  background-color: #b70c0c;
+  background-color: #b70c0c !important;
 }
 
 .button {
@@ -32,7 +32,7 @@ $cellSize: 14px;
   margin-right: 10px;
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -65,6 +65,16 @@ $cellSize: 14px;
 }
 
 input {
+  width: 10vw;
+  padding: 9px 20px;
+  margin: 8px 10px;
+
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.selectFigure {
   width: 10vw;
   padding: 9px 20px;
   margin: 8px 10px;
