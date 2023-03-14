@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Conway_cellular_automata/static/css/main.26abf368.css",
+    "main.js": "/Conway_cellular_automata/static/js/main.16a83478.js",
+    "index.html": "/Conway_cellular_automata/index.html",
+    "main.26abf368.css.map": "/Conway_cellular_automata/static/css/main.26abf368.css.map",
+    "main.16a83478.js.map": "/Conway_cellular_automata/static/js/main.16a83478.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.26abf368.css",
+    "static/js/main.16a83478.js"
+  ]
+}
